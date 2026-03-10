@@ -27,6 +27,17 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
+    - name: Accept Android SDK licenses
+      run: yes | sdkmanager --licenses || true
+
+    - name: Setup Android command line tools
+      run: |
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+        unzip -q commandlinetools-linux-11076708_latest.zip -d $ANDROID_HOME
+        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+        yes | sdkmanager --licenses || true
+        sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
     - name: Build Debug APK
       run: ./gradlew assembleDebug
 
